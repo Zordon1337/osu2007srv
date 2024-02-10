@@ -16,4 +16,3 @@ if($mode == "register")
     process your register page if you want
     */
 }
-?>
