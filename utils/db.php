@@ -119,6 +119,16 @@ function GetTotalScoreByUser(mysqli $conn, $username)
     // Return the total score sum
     return $totalScoreSum;
 }
+function GetPfp(mysqli $conn, $username)
+{
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s",$username);
+    $result = $stmt->execute();
+    $stmt->bind_result($uid,$username,$password,$totalscore,$accuracy);
+    $stmt->fetch();
+    return "$uid.png";
+}
 function CheckIfBeatmapRanked(mysqli $conn, $checksum)
 {
     $sql = "SELECT * FROM beatmapsets WHERE checksum = ?";
