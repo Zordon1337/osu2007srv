@@ -45,23 +45,37 @@ function CheckIfCorrect($username,$password, mysqli $conn)
     $stmt->store_result();
     if($stmt->num_rows > 0)
     {
-        $stmt->close();
-        $conn->close();
+        
+        
         return true;
     } else {
-        $stmt->close();
-        $conn->close();
+        
+        
         return false;
     }
 }
 function InsertScore(Score $score, mysqli $conn)
 {
-    $conn = mysqli_connect("localhost","test","test","testdb");
     InitDB($conn);
     $stmt = $conn->prepare("INSERT INTO `scores` (`fileChecksum`, `Username`, `onlinescoreChecksum`, `count300`, `count100`, `count50`, `countGeki`, `countKatu`, `countMiss`, `totalScore`, `maxCombo`, `perfect`, `ranking`, `enabledMods`, `pass`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt->bind_param("sssssssssssssss", $score->fileChecksum, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass);
     $result = $stmt->execute();
-    $stmt->close();
-    $conn->close();
+    
+    
 }
+function ReturnScores(mysqli $conn, $checksum)
+{
+    $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $checksum);
+    $result = $stmt->execute();
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+    $row = 1;
+    while ($stmt->fetch()) {
+        echo "$row:$Username:$totalScore:$maxCombo:$count50:$count100:$count300:$countMiss:$countKatu:$countGeki:$perfect:$enabledMods\n";
+        $row += 1;
+    }
+}
+
+

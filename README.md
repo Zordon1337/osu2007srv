@@ -9,7 +9,7 @@
   b162 - unsupported yet
   b144 - unsupported yet
   b130 - unsupported yet
-  b99 - unsupported(next build to be worked on)
+  b99 - everything works except replays
   b86 - fully supported
   b70 - fully supported
 </pre>
