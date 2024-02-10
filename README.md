@@ -14,7 +14,7 @@
   b196 - unsupported yet
   b170 - unsupported yet
   b162 - unsupported yet
-  b144 - unsupported yet
+  b144 - everything works except replays
   b130 - everything works except replays
   b99 - everything works except replays
   b86 - fully supported
