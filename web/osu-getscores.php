@@ -1,4 +1,11 @@
 <?php
 include("../utils/db.php");
 $checksum = $_GET["c"];
-ReturnScores($conn,$checksum);
+if(CheckIfBeatmapRanked($conn,$checksum))
+{
+    ReturnScores($conn,$checksum);
+} else {
+    echo "-1";
+}
+
+

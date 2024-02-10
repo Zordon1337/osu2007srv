@@ -32,8 +32,20 @@ $queryUsers = "
         `accuracy` text NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ";
+$queryBeatmapsets = "
+CREATE TABLE IF NOT EXISTS `beatmapsets` (
+    `checksum` text NOT NULL,
+    `name` text NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  ";
+$queryBeatmapsets2 = "
+  INSERT IGNORE INTO `beatmapsets` (`checksum`, `name`) VALUES
+  ('a5b99395a42bd55bc5eb1d2411cbdf8b', 'Kenji Ninuma - DISCO PRINCE');
+  ";
       $db->query($queryScores);
       $db->query($queryUsers);
+      $db->query($queryBeatmapsets);
+      $db->query($queryBeatmapsets2);
       
 }
 function CheckIfCorrect($username,$password, mysqli $conn)
@@ -78,4 +90,55 @@ function ReturnScores(mysqli $conn, $checksum)
     }
 }
 
+function GetAccuracy(mysqli $conn, $username)
+{
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s",$username);
+    $result = $stmt->execute();
+    $stmt->bind_result($uid,$username,$password,$totalscore,$accuracy);
+    $stmt->fetch();
+    return $accuracy;
+}
+function GetTotalScoreByUser(mysqli $conn, $username)
+{
+    $sql = "SELECT totalScore FROM scores WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $result = $stmt->execute();
+    $stmt->bind_result($totalScore);
 
+    $totalScoreSum = 0;
+
+    while ($stmt->fetch()) {
+        // Assuming totalScore is a numeric value; if not, you may need additional validation
+        $totalScoreSum += (int)$totalScore;
+    }
+
+
+    // Return the total score sum
+    return $totalScoreSum;
+}
+function CheckIfBeatmapRanked(mysqli $conn, $checksum)
+{
+    $sql = "SELECT * FROM beatmapsets WHERE checksum = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $checksum);
+    $stmt->execute();
+    $stmt->store_result();
+    if($stmt->num_rows > 0)
+    {
+        return true;
+    } else {
+        
+        
+        return false;
+    }
+}
+
+function GetRank(mysqli $conn, $username)
+{
+    /*
+        todo
+    */
+}
