@@ -11,7 +11,7 @@ if($b504_experiment == true)
     if(CheckIfBeatmapRanked($conn,$checksum))
     {
         
-        ReturnScores2($conn,$checksum);
+        ReturnScores5($conn,$checksum);
     } else {
         echo "0";
     }

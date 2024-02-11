@@ -109,7 +109,25 @@ function ReturnScores2(mysqli $conn, $checksum)
     }
     $stmt->close();
 }
-
+function ReturnScores5(mysqli $conn, $checksum)
+{
+    InitDB($conn);
+    $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $checksum);
+    $result = $stmt->execute();
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+    
+    while ($stmt->fetch()) {
+        $id = 1;
+        if($pass != "False")
+        {
+            echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+        }
+        
+    }
+    $stmt->close();
+}
 function GetAccuracy(mysqli $conn, $username)
 {
     
@@ -132,12 +150,8 @@ function GetTotalScoreByUser(mysqli $conn, $username)
     $totalScoreSum = 0;
 
     while ($stmt->fetch()) {
-        // Assuming totalScore is a numeric value; if not, you may need additional validation
         $totalScoreSum += (int)$totalScore;
     }
-
-
-    // Return the total score sum
     return $totalScoreSum;
 }
 function GetPfp(mysqli $conn, $username)
@@ -185,6 +199,7 @@ function GetRank(mysqli $conn, $username)
     /*
         todo
     */
+    return 1;
 }
 function CheckIfUserExists(mysqli $conn, $username)
 {

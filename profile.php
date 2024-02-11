@@ -1,8 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+if(!isset($_GET['username']))
+{
+    http_response_code(403);
+    die();
+}
+$username = $_GET['username'];
+include("utils/db.php");
+echo "<!DOCTYPE html>
+<html lang=''en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>osu2007srv</title>
     <style>
         body {
@@ -55,20 +63,31 @@
     </style>
 </head>
 <body>
-    <div id="container">
-        <form action="/profile.php" method="GET"/>
-        <h1>osu!2007</h1>
-        <p>for now there is only register option and search player option</p>
-        <div id="playerInfo">
-            <label for="playerNameInput" id="playerNameLabel">Player Name:</label>
-            <input type="text" id="playerNameInput" name="username">
-        </div>
-        <br>
-        <input type="submit" id="searchButton" value="Search Player"/>
-        </form>
-        <a href="/register.php">
-            <button id="searchButton">Register</button>
-        </a>
-    </div>
+    <div id='container'>
+    <h1>$username</h1>";
+if(CheckIfUserExists($conn,$username))
+{
+    $accuracy = floatval(GetAccuracy($conn,$username))*100;
+    $score = GetTotalScoreByUser($conn,$username);
+    $rank = GetRank($conn,$username);
+echo " 
+<pre>
+Accuracy: $accuracy%<br/>
+Total Score: $score<br/>
+Rank: #$rank
+</pre>
+</form>
+</div>
 </body>
-</html>
+</html>";
+} else {
+    echo "
+   User doesn't exist     
+    </form>
+    </div>
+    </body>
+    </html>
+";
+}
+
+
