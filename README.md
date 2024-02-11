@@ -10,11 +10,16 @@
 
   server DOES NOT include irc chat, you have to make one yourself 
   or use my <a href="https://github.com/Zordon1337/EIRC">very basic server</a>
+
+  rating needs to be implemented in b222
+  
+  versions above b170 have problem with black box instead of profile picture because
+  these use diffrent image rendering system
 </pre>
 ### supported versions
 <pre>
-  b222 - unsupported yet
-  b196 - unsupported yet
+  b222 - everything works except replays and profile picture being black box
+  b196 - everything works except replays and profile picture being black box
   b170 - everything works except replays and profile picture being black box
   b162 - everything works except replays
   b144 - everything works except replays

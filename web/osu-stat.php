@@ -4,6 +4,7 @@ include("../utils/db.php");
 /*
 endpoint introduced around b130
 client uses it to fetch data(ranked score, accuracy and rank)
+replaced in b22 to osu-statoth.php
 */
 $username = $_GET['u'];
 $password = $_GET['p'];
