@@ -7,13 +7,16 @@
 
   server on first login attempt gonna create db tables, and insert default
   beatmap(disco prince) to beatmap checksum whitelist
+
+  server DOES NOT include irc chat, you have to make one yourself 
+  or use my <a href="https://github.com/Zordon1337/EIRC">very basic server</a>
 </pre>
 ### supported versions
 <pre>
   b222 - unsupported yet
   b196 - unsupported yet
   b170 - unsupported yet
-  b162 - unsupported yet
+  b162 - everything works except replays
   b144 - everything works except replays
   b130 - everything works except replays
   b99 - everything works except replays

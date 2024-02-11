@@ -89,6 +89,21 @@ function ReturnScores(mysqli $conn, $checksum)
         $row += 1;
     }
 }
+function ReturnScores2(mysqli $conn, $checksum)
+{
+    $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $checksum);
+    $result = $stmt->execute();
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+    
+    while ($stmt->fetch()) {
+        $id = 1;
+        echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+        
+    }
+    $stmt->close();
+}
 
 function GetAccuracy(mysqli $conn, $username)
 {
@@ -129,6 +144,19 @@ function GetPfp(mysqli $conn, $username)
     $stmt->fetch();
     return "$uid.png";
 }
+function GetUserIdByUsername(mysqli $conn, $username)
+{
+    $sql = "SELECT uid FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->bind_result($uid);
+    $stmt->fetch();
+    $stmt->close();  // Close the statement here
+
+    return $uid;
+}
+
 function CheckIfBeatmapRanked(mysqli $conn, $checksum)
 {
     $sql = "SELECT * FROM beatmapsets WHERE checksum = ?";
