@@ -130,15 +130,26 @@ function ReturnScores5(mysqli $conn, $checksum)
 }
 function GetAccuracy(mysqli $conn, $username)
 {
-    
-    $sql = "SELECT * FROM users WHERE username = ?";
+    $sql = "SELECT * FROM scores WHERE username = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s",$username);
+    $stmt->bind_param("s", $username);
     $result = $stmt->execute();
-    $stmt->bind_result($uid,$username,$password,$totalscore,$accuracy);
-    $stmt->fetch();
-    return $accuracy;
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+
+    $accuracy = 0;
+    $row = 0;
+
+    while ($stmt->fetch()) {
+        $accuracy += (float)((int)$count50 * 50 + (int)$count100 * 100 + (int)$count300 * 300) / (float)(((int)$count300 + (int)$count100 + (int)$count50 + (int)$countGeki + (int)$countKatu + (int)$countMiss) * 300);
+        $row++;
+    }
+    if ($row > 0) {
+        return $accuracy / $row;
+    } else {
+        return 1; 
+    }
 }
+
 function GetTotalScoreByUser(mysqli $conn, $username)
 {
     $sql = "SELECT totalScore FROM scores WHERE username = ?";

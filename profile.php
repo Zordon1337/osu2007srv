@@ -67,7 +67,7 @@ echo "<!DOCTYPE html>
     <h1>$username</h1>";
 if(CheckIfUserExists($conn,$username))
 {
-    $accuracy = floatval(GetAccuracy($conn,$username))*100;
+    $accuracy = round(floatval(GetAccuracy($conn,$username))*100,2);
     $score = GetTotalScoreByUser($conn,$username);
     $rank = GetRank($conn,$username);
 echo " 
