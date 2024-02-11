@@ -42,7 +42,11 @@ $queryBeatmapsets2 = "
   INSERT IGNORE INTO `beatmapsets` (`checksum`, `name`) VALUES
   ('a5b99395a42bd55bc5eb1d2411cbdf8b', 'Kenji Ninuma - DISCO PRINCE');
   ";
-      $db->query($queryScores);
+      if(!CheckIfBeatmapRanked($db,"a5b99395a42bd55bc5eb1d2411cbdf8b"))
+      {
+        $db->query($queryScores);
+      }
+      
       $db->query($queryUsers);
       $db->query($queryBeatmapsets);
       $db->query($queryBeatmapsets2);

@@ -1,8 +1,12 @@
+<?php
+
+
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang=''en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>osu2007srv</title>
     <style>
         body {
@@ -55,25 +59,14 @@
     </style>
 </head>
 <body>
-    <div id="container">
-        <form action="/profile.php" method="GET"/>
-        <h1>osu!2007</h1>
-        <p>for now there is only register option and search player option</p>
-        <div id="playerInfo">
-            <label for="playerNameInput" id="playerNameLabel">Player Name:</label>
-            <input type="text" id="playerNameInput" name="username">
+<form action="newmap-handle.php" method="GET">
+        <div id="container">
+            <p>Beatmap checksum</p>
+            <input name="c"/>
+            
+            <br/>
+            <br/>
+            <input type="submit" id="searchButton" value="Add beatmap to whitelist"/>
         </div>
-        <input type="submit" id="searchButton" value="Search Player"/>
-        </form>
-        <br/>
-        <a href="/register.php">
-            <button id="searchButton">Register</button>
-        </a>
-        <br/>
-        <br/>
-        <a href="/newmap.php">
-            <button id="searchButton">Rank map</button>
-        </a>
-    </div>
+</form>
 </body>
-</html>
