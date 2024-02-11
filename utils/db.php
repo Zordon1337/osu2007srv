@@ -140,8 +140,11 @@ function GetAccuracy(mysqli $conn, $username)
     $row = 0;
 
     while ($stmt->fetch()) {
-        $accuracy += (float)((int)$count50 * 50 + (int)$count100 * 100 + (int)$count300 * 300) / (float)(((int)$count300 + (int)$count100 + (int)$count50 + (int)$countGeki + (int)$countKatu + (int)$countMiss) * 300);
-        $row++;
+        if($pass != "False")
+        {
+            $accuracy += (float)((int)$count50 * 50 + (int)$count100 * 100 + (int)$count300 * 300) / (float)(((int)$count300 + (int)$count100 + (int)$count50 + (int)$countGeki + (int)$countKatu + (int)$countMiss) * 300);
+            $row++;
+        }
     }
     if ($row > 0) {
         return $accuracy / $row;
