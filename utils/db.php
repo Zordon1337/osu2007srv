@@ -78,6 +78,7 @@ function InsertScore(Score $score, mysqli $conn)
 }
 function ReturnScores(mysqli $conn, $checksum)
 {
+    InitDB($conn);
     $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $checksum);
@@ -91,6 +92,7 @@ function ReturnScores(mysqli $conn, $checksum)
 }
 function ReturnScores2(mysqli $conn, $checksum)
 {
+    InitDB($conn);
     $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $checksum);
@@ -110,6 +112,7 @@ function ReturnScores2(mysqli $conn, $checksum)
 
 function GetAccuracy(mysqli $conn, $username)
 {
+    
     $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s",$username);
@@ -155,7 +158,7 @@ function GetUserIdByUsername(mysqli $conn, $username)
     $stmt->execute();
     $stmt->bind_result($uid);
     $stmt->fetch();
-    $stmt->close();  // Close the statement here
+    $stmt->close(); 
 
     return $uid;
 }
@@ -182,4 +185,30 @@ function GetRank(mysqli $conn, $username)
     /*
         todo
     */
+}
+function CheckIfUserExists(mysqli $conn, $username)
+{
+    InitDB($conn);
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->store_result();
+    if($stmt->num_rows > 0)
+    {
+        return true;
+    } else {
+        
+        
+        return false;
+    }
+}
+function CreateAccount(mysqli $conn, $username, $password)
+{
+    $sql = "INSERT INTO `users`(`userid`, `username`, `password`, `totalscore`, `accuracy`) VALUES (?, ?, ?, '0', '1');";
+    $randid = rand(1, 255555);
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $randid, $username, $password);
+    $result = $stmt->execute();
+
 }
