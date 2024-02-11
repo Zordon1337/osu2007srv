@@ -15,7 +15,7 @@
 <pre>
   b222 - unsupported yet
   b196 - unsupported yet
-  b170 - unsupported yet
+  b170 - everything works except replays
   b162 - everything works except replays
   b144 - everything works except replays
   b130 - everything works except replays
