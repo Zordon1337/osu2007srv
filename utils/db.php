@@ -99,7 +99,10 @@ function ReturnScores2(mysqli $conn, $checksum)
     
     while ($stmt->fetch()) {
         $id = 1;
-        echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+        if($pass != "False")
+        {
+            echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+        }
         
     }
     $stmt->close();

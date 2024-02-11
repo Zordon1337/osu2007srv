@@ -18,6 +18,7 @@
 </pre>
 ### supported versions
 <pre>
+  b504 - experimental score server(not recommended to use)
   b222 - everything works except replays and profile picture being black box
   b196 - everything works except replays and profile picture being black box
   b170 - everything works except replays and profile picture being black box
