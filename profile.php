@@ -32,7 +32,7 @@ if(CheckIfUserExists($conn,$username))
         $add = "<p id='adminBadge'>ADMIN</p>";
     }
 echo " 
-<img src='/forum/download.php?avatar=$img' height='186' width='186'/>
+<img id='pfp' src='/forum/download.php?avatar=$img' height='186' width='186'/>
 $add
 <pre>
 Accuracy: $accuracy%<br/>
