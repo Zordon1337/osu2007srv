@@ -11,7 +11,5 @@ $username = $_GET['u'];
 $accuracy = GetAccuracy($conn,$username);
 $rankedscore = GetTotalScoreByUser($conn,$username);
 $pfpid = GetPfp($conn,$username);
-/*
-    need to implement ranks
-*/
-echo "$rankedscore|$accuracy|unknown1|unknown2|1|$pfpid";
+$rank = GetRank($conn,$username)
+echo "$rankedscore|$accuracy|unknown1|unknown2|$rank|$pfpid";
