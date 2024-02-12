@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost","test","test","osu2007srv");
+include("./conn.php");
 
 function InitDB(mysqli $db)
 {
@@ -83,7 +83,16 @@ function InsertScore(Score $score, mysqli $conn)
 function ReturnScores(mysqli $conn, $checksum)
 {
     InitDB($conn);
-    $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
+    $sql = "WITH RankedScores AS (
+        SELECT *,
+            ROW_NUMBER() OVER (PARTITION BY Username ORDER BY CAST(totalScore AS SIGNED) DESC) AS row_num
+        FROM scores
+        WHERE fileChecksum = ?
+    )
+    SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass
+    FROM RankedScores
+    WHERE row_num = 1
+    ORDER BY CAST(totalScore AS SIGNED) DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $checksum);
     $result = $stmt->execute();
@@ -231,10 +240,25 @@ function CheckIfBeatmapRanked(mysqli $conn, $checksum)
 
 function GetRank(mysqli $conn, $username)
 {
-    /*
-        todo
-    */
-    return 1;
+    $sql = "SELECT Username, totalScore
+            FROM scores
+            WHERE fileChecksum = ?
+            ORDER BY CAST(totalScore AS SIGNED) DESC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $checksum);
+    $result = $stmt->execute();
+    $stmt->bind_result($Username, $totalScore);
+
+    $id = 1;
+    while ($stmt->fetch()) {
+        if($Username == $username)
+        {
+            return $id;
+        }
+        $id++;
+    }
+    return $id;
 }
 function CheckIfUserExists(mysqli $conn, $username)
 {
