@@ -78,7 +78,10 @@ function InsertScore(Score $score, mysqli $conn)
     $stmt->bind_param("sssssssssssssss", $score->fileChecksum, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass);
     $result = $stmt->execute();
     
-    
+    $stmt = $conn->prepare("UPDATE `users` SET `totalscore`=? WHERE username = ?");
+    $stmt->bind_param("ss", $score->totalScore, $score->Username);
+    $result = $stmt->execute();
+
 }
 function ReturnScores(mysqli $conn, $checksum)
 {
@@ -242,13 +245,13 @@ function GetRank(mysqli $conn, $username)
 {
     InitDB($conn);
 
-    $sql = "SELECT Username, totalScore
-            FROM scores
-            ORDER BY CAST(totalScore AS SIGNED) DESC";
+    $sql = "SELECT Username, totalscore
+            FROM users
+            ORDER BY CAST(totalscore AS SIGNED) DESC";
 
     $stmt = $conn->prepare($sql);
     $result = $stmt->execute();
-    $stmt->bind_result($currentUsername, $totalScore);
+    $stmt->bind_result($currentUsername, $totalscore);
 
     $id = 1;
     while ($stmt->fetch()) {
