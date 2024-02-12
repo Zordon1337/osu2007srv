@@ -97,25 +97,28 @@ function InsertScore(Score $score, mysqli $conn)
 }
 function CalculateAGrades(mysqli $conn, $username)
 {
-    $stmt= $conn->prepare("SELECT * FROM users WHERE username = ? && ranking == A");
-    $stmt->bind_param("s",$username);
+    $stmt = $conn->prepare("SELECT * FROM scores WHERE username = ? AND ranking = 'A'");
+    $stmt->bind_param("s", $username);
     $result = $stmt->execute();
     return $stmt->num_rows;
 }
+
 function CalculateSGrades(mysqli $conn, $username)
 {
-    $stmt= $conn->prepare("SELECT * FROM users WHERE username = ? && ranking == S");
-    $stmt->bind_param("s",$username);
+    $stmt = $conn->prepare("SELECT * FROM scores WHERE username = ? AND ranking = 'S'");
+    $stmt->bind_param("s", $username);
     $result = $stmt->execute();
     return $stmt->num_rows;
 }
+
 function CalculateSSGrades(mysqli $conn, $username)
 {
-    $stmt= $conn->prepare("SELECT * FROM users WHERE username = ? && ranking == SS");
-    $stmt->bind_param("s",$username);
+    $stmt = $conn->prepare("SELECT * FROM scores WHERE username = ? AND ranking = 'SS'");
+    $stmt->bind_param("s", $username);
     $result = $stmt->execute();
     return $stmt->num_rows;
 }
+
 function ReturnScores(mysqli $conn, $checksum)
 {
     InitDB($conn);
