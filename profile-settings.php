@@ -138,8 +138,10 @@ if(!isset($_GET['action']))
         if(CheckIfAdmin($conn,$_SESSION['username']))
         {
             echo "
+            <br/>
+            <br/>
             <form action='newmap-handle.php' method='GET'>
-            <div id='container'>
+            <div>
             <p>Beatmap checksum</p>
             <input name='c'/>
             

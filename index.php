@@ -75,16 +75,13 @@ echo "<p>Currently serving $d1 players,<br/> with total of $d2 plays</p>"
         <a href="/register.php">
             <button id="searchButton">Register</button>
         </a>
-        
-        <a href="/newmap.php">
-            <button id="searchButton">Rank map</button>
-        </a>
-        <br/>
-        <br/>
+    
         <a href="/leaderboard.php">
             <button id="searchButton">Leaderboard</button>
         </a>
         
+        <br/>
+        <br/>
         <a href="/login.php">
             <button id="searchButton">Login</button>
         </a>

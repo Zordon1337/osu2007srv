@@ -86,9 +86,9 @@ ini_set('display_errors', 0);
             <th>Username</th>
             <th>Total Score</th>
             <th>Accuracy</th>
-            <th>SS</th>
-            <th>S</th>
-            <th>A</th>
+            <th><img src="img/SS.png" height="16" width="16"/></th>
+            <th><img src="img/S.png" height="16" width="16"/></th>
+            <th><img src="img/A.png" height="16" width="16"/></th>
         </tr>
         </thead>
         <tbody>

@@ -98,11 +98,7 @@ function InsertScore(Score $score, mysqli $conn)
     $stmt->bind_param("ssssss", $totalscore, $accuracy, $S, $SS, $A, $score->Username);
     $result = $stmt->execute();
     
-    if (!$result) {
-        echo "Error: " . $stmt->error;
-    } else {
-        echo "$S,$SS,$A,$score->Username,$accuracy,$totalscore";
-    }
+   
    
 }
 
@@ -132,7 +128,7 @@ function CalculateSGrades(mysqli $conn, $username)
 
 function CalculateSSGrades(mysqli $conn, $username)
 {
-    $ranking = 'SS';
+    $ranking = 'X';
     $sql = "SELECT * FROM scores WHERE Username = ? AND ranking = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $username,$ranking);
