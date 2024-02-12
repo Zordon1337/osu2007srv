@@ -36,6 +36,11 @@ $queryUsers = "
     `A` text NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ";
+$queryAdmins = "
+CREATE TABLE IF NOT EXISTS `admins` (
+    `username` text NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+";
 $queryBeatmapsets = "
 CREATE TABLE IF NOT EXISTS `beatmapsets` (
     `checksum` text NOT NULL,
@@ -52,7 +57,7 @@ $queryBeatmapsets2 = "
         $db->query($queryBeatmapsets2);
 
       }
-      
+      $db->query($queryAdmins);
       $db->query($queryUsers);
       $db->query($queryScores);
       
@@ -191,10 +196,21 @@ function ReturnScores2(mysqli $conn, $checksum)
 }
 
 
+function CheckIfAdmin(mysqli $conn, $username)
+{
+    $sql = "SELECT * FROM admins WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s",$username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result->num_rows != 0)
+    {
+        return true;
+    } else {
+        return false;
+    }
 
-
-
-
+}
 function ReturnScores5(mysqli $conn, $checksum)
 {
     InitDB($conn);
@@ -266,7 +282,7 @@ function GetPfp(mysqli $conn, $username)
 }
 function GetUserIdByUsername(mysqli $conn, $username)
 {
-    $sql = "SELECT uid FROM users WHERE username = ?";
+    $sql = "SELECT userid FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -276,7 +292,20 @@ function GetUserIdByUsername(mysqli $conn, $username)
 
     return $uid;
 }
-
+function GetPlayersAmount(mysqli $conn)
+{
+    $stmt = $conn->prepare("SELECT * FROM users");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows;
+}
+function GetTotalPlayCount(mysqli $conn)
+{
+    $stmt = $conn->prepare("SELECT * FROM scores");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows;
+}
 function CheckIfBeatmapRanked(mysqli $conn, $checksum)
 {
     $sql = "SELECT * FROM beatmapsets WHERE checksum = ?";

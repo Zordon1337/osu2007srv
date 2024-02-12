@@ -61,6 +61,9 @@ echo "<!DOCTYPE html>
             align-items: center;
             margin-bottom: 20px;
         }
+        img {
+            border: 2px solid white;
+        }
     </style>
 </head>
 <body>
@@ -69,9 +72,11 @@ echo "<!DOCTYPE html>
 if(CheckIfUserExists($conn,$username))
 {
     $accuracy = round(floatval(GetAccuracy($conn,$username))*100,2);
-    $score = GetTotalScoreByUser($conn,$username);
-    $rank = GetRank($conn,$username);
+    $score = number_format(GetTotalScoreByUser($conn,$username));
+    $rank = number_format(GetRank($conn,$username));
+    $img = GetPfp($conn,$username);
 echo " 
+<img src='/forum/download.php?avatar=$img' height='186' width='186'/>
 <pre>
 Accuracy: $accuracy%<br/>
 Total Score: $score<br/>

@@ -7,11 +7,14 @@ replaced by osu-getscores2.php in b162
 */
 include("../utils/db.php");
 $checksum = $_GET["c"];
-if(CheckIfBeatmapRanked($conn,$checksum))
+if($all_bmaps_ranked == false)
 {
-    ReturnScores($conn,$checksum);
-} else {
-    echo "-1";
+    if(CheckIfBeatmapRanked($conn,$checksum))
+    {
+        
+        ReturnScores($conn,$checksum);
+    } else {
+        echo "-1";
+    }
 }
-
 
