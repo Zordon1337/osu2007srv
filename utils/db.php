@@ -240,26 +240,26 @@ function CheckIfBeatmapRanked(mysqli $conn, $checksum)
 
 function GetRank(mysqli $conn, $username)
 {
+    InitDB($conn);
+
     $sql = "SELECT Username, totalScore
             FROM scores
-            WHERE fileChecksum = ?
             ORDER BY CAST(totalScore AS SIGNED) DESC";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $checksum);
     $result = $stmt->execute();
-    $stmt->bind_result($Username, $totalScore);
+    $stmt->bind_result($currentUsername, $totalScore);
 
     $id = 1;
     while ($stmt->fetch()) {
-        if($Username == $username)
-        {
+        if (strcasecmp($currentUsername, $username) === 0) {
             return $id;
         }
         $id++;
     }
-    return $id;
+    return 0; 
 }
+
 function CheckIfUserExists(mysqli $conn, $username)
 {
     InitDB($conn);
