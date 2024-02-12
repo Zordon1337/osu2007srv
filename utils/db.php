@@ -335,7 +335,7 @@ function RenderLeaderboard(mysqli $conn)
     $stmt = $conn->prepare($sql);
     $result = $stmt->execute();
     $stmt->bind_result($username, $totalscore,$accuracy,$S,$SS,$A);
-
+    $realacc = (float)$accuracy*100;
     $top = 1;
     while ($stmt->fetch()) {
         echo "
@@ -343,6 +343,7 @@ function RenderLeaderboard(mysqli $conn)
         <td>$top</td>
         <td>$username</td>
         <td>$totalscore</td>
+        <td>$realacc</td>
         <td>$SS</td>
         <td>$S</td>
         <td>$A</td>

@@ -83,6 +83,7 @@ ini_set('display_errors', 0);
         <thead>
         <tr>
             <th>Rank</th>
+            <th>Username</th>
             <th>Total Score</th>
             <th>Accuracy</th>
             <th>SS</th>
