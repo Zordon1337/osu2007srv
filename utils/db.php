@@ -384,11 +384,12 @@ function RenderLeaderboard(mysqli $conn)
     $top = 1;
     while ($stmt->fetch()) {
         $accuracy2 = round((float)$accuracy*100,2);
+        $totalscore2 = number_format($totalscore);
         echo "
         <tr>
         <td>$top</td>
         <td>$username</td>
-        <td>$totalscore</td>
+        <td>$totalscore2</td>
         <td>$accuracy2%</td>
         <td>$SS</td>
         <td>$S</td>
