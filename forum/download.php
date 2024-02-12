@@ -8,7 +8,7 @@ introduced around b144
 */
 
 $avatar = $_GET['avatar']; // basically avatar name
-header("Content-type: image/png");
+header("Content-type: image/jpg");
 $filePath = "./avatars/$avatar";
 if(file_exists($filePath))
 {

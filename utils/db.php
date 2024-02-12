@@ -274,7 +274,7 @@ function GetPfp(mysqli $conn, $username)
     $result = $stmt->execute();
     $stmt->bind_result($uid);
     $stmt->fetch();
-    return "$uid.png";
+    return "$uid.jpg";
 }
 function GetUserIdByUsername(mysqli $conn, $username)
 {
