@@ -1,5 +1,6 @@
 <?php
 include("utils/db.php");
+ini_set('display_errors', 0);
 if(!isset($_GET["username"]) || !isset($_GET['password']))
 {
     http_response_code(401);

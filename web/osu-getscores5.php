@@ -1,3 +1,4 @@
+<?php ini_set('display_errors', 0); ?>
 <?php
 /*
 experimental endpoint for b504

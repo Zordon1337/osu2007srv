@@ -1,3 +1,4 @@
+<?php ini_set('display_errors', 0); ?>
 <?
 /*
 basically phpBB page
@@ -12,7 +13,6 @@ if(!isset($_GET['mode']))
 $mode = $_GET['mode'];
 if($mode == "register")
 {
-    /*
-    process your register page if you want
-    */
+    header("location: /register.php");
+    die();
 }

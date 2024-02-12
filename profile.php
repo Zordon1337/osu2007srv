@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 0);
 if(!isset($_GET['username']))
 {
     http_response_code(403);

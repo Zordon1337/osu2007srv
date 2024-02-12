@@ -1,9 +1,12 @@
-<?php ini_set('display_errors', 0); ?>
+<?php
+ini_set('display_errors', 0);
+
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>osu2007srv</title>
     <style>
         body {
@@ -53,33 +56,42 @@
             align-items: center;
             margin-bottom: 20px;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+          background-color: #f2f2f2;
+          color:black;
+        }
     </style>
 </head>
 <body>
-    <div id="container">
-        <form action="/profile.php" method="GET"/>
-        <h1>osu!2007</h1>
-        <p>for now there is only register option and search player option</p>
-        <div id="playerInfo">
-            <label for="playerNameInput" id="playerNameLabel">Player Name:</label>
-            <input type="text" id="playerNameInput" name="username">
-        </div>
-        <input type="submit" id="searchButton" value="Search Player"/>
-        </form>
-        <br/>
-        <a href="/register.php">
-            <button id="searchButton">Register</button>
-        </a>
-        <br/>
-        <br/>
-        <a href="/newmap.php">
-            <button id="searchButton">Rank map</button>
-        </a>
-        <br/>
-        <br/>
-        <a href="/leaderboard.php">
-            <button id="searchButton">Leaderboard</button>
-        </a>
-    </div>
-</body>
-</html>
+    <div id='container'>
+        <h2>Leaderboard</h2>
+  
+        <table>
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Total Score</th>
+            <th>Accuracy</th>
+            <th>SS</th>
+            <th>S</th>
+            <th>A</th>
+        </tr>
+        </thead>
+        <tbody>
+<?php
+include("utils/db.php");
+echo RenderLeaderboard($conn);
+?>

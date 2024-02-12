@@ -1,3 +1,4 @@
+<?php ini_set('display_errors', 0); ?>
 <?php
 include("conn.php");
 
@@ -24,12 +25,15 @@ function InitDB(mysqli $db)
 ";
 
 $queryUsers = "
-    CREATE TABLE IF NOT EXISTS `users` (
-        `userid` text NOT NULL,
-        `username` text NOT NULL,
-        `password` text NOT NULL,
-        `totalscore` text NOT NULL,
-        `accuracy` text NOT NULL
+    CREATE TABLE `users` (
+    `userid` text NOT NULL,
+    `username` text NOT NULL,
+    `password` text NOT NULL,
+    `totalscore` text NOT NULL,
+    `accuracy` text NOT NULL,
+    `S` text NOT NULL,
+    `SS` text NOT NULL,
+    `A` text NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ";
 $queryBeatmapsets = "
@@ -44,12 +48,13 @@ $queryBeatmapsets2 = "
   ";
       if(!CheckIfBeatmapRanked($db,"a5b99395a42bd55bc5eb1d2411cbdf8b"))
       {
-        $db->query($queryScores);
+        $db->query($queryBeatmapsets);
+        $db->query($queryBeatmapsets2);
+
       }
       
       $db->query($queryUsers);
-      $db->query($queryBeatmapsets);
-      $db->query($queryBeatmapsets2);
+      $db->query($queryScores);
       
 }
 function CheckIfCorrect($username,$password, mysqli $conn)
@@ -78,10 +83,38 @@ function InsertScore(Score $score, mysqli $conn)
     $stmt->bind_param("sssssssssssssss", $score->fileChecksum, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass);
     $result = $stmt->execute();
     $totalscore = GetTotalScoreByUser($conn,$score->Username);
-    $stmt = $conn->prepare("UPDATE `users` SET `totalscore`=? WHERE username = ?");
-    $stmt->bind_param("ss", $totalscore, $score->Username);
+    $A = CalculateAGrades($conn,$score->Username);
+    $S = CalculateSGrades($conn,$score->Username);
+    $SS = CalculateSSGrades($conn,$score->Username);
+    $accuracy = GetAccuracy($conn,$score->Username);
+    $stmt = $conn->prepare("UPDATE `users` SET `totalscore`=?, `accuracy`=?, `S`=?, `SS`=?, `A`=? WHERE username = ?");
+    $stmt->bind_param("ssssss", $totalscore, $accuracy, $S, $SS, $A, $score->Username);
     $result = $stmt->execute();
 
+    
+
+
+}
+function CalculateAGrades(mysqli $conn, $username)
+{
+    $stmt= $conn->prepare("SELECT * FROM users WHERE username = ? && ranking == A");
+    $stmt->bind_param("s",$username);
+    $result = $stmt->execute();
+    return $stmt->num_rows;
+}
+function CalculateSGrades(mysqli $conn, $username)
+{
+    $stmt= $conn->prepare("SELECT * FROM users WHERE username = ? && ranking == S");
+    $stmt->bind_param("s",$username);
+    $result = $stmt->execute();
+    return $stmt->num_rows;
+}
+function CalculateSSGrades(mysqli $conn, $username)
+{
+    $stmt= $conn->prepare("SELECT * FROM users WHERE username = ? && ranking == SS");
+    $stmt->bind_param("s",$username);
+    $result = $stmt->execute();
+    return $stmt->num_rows;
 }
 function ReturnScores(mysqli $conn, $checksum)
 {
@@ -288,4 +321,36 @@ function CreateAccount(mysqli $conn, $username, $password)
     $stmt->bind_param("sss", $randid, $username, $password);
     $result = $stmt->execute();
 
+}
+
+
+
+
+function RenderLeaderboard(mysqli $conn)
+{
+    $sql = "SELECT Username, totalscore, accuracy, S, SS, A
+            FROM users
+            ORDER BY CAST(totalscore AS SIGNED) DESC";
+
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->execute();
+    $stmt->bind_result($username, $totalscore,$accuracy,$S,$SS,$A);
+
+    $top = 1;
+    while ($stmt->fetch()) {
+        echo "
+        <tr>
+        <td>$top</td>
+        <td>$username</td>
+        <td>$totalscore</td>
+        <td>$SS</td>
+        <td>$S</td>
+        <td>$A</td>
+        </tr>";
+        $top++;
+    }
+    echo "</tbody>
+    </table>
+    </div>
+    </body>";
 }
