@@ -77,9 +77,9 @@ function InsertScore(Score $score, mysqli $conn)
 
     $stmt->bind_param("sssssssssssssss", $score->fileChecksum, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass);
     $result = $stmt->execute();
-    
+    $totalscore = GetTotalScoreByUser($conn,$score->Username);
     $stmt = $conn->prepare("UPDATE `users` SET `totalscore`=? WHERE username = ?");
-    $stmt->bind_param("ss", $score->totalScore, $score->Username);
+    $stmt->bind_param("ss", $totalscore, $score->Username);
     $result = $stmt->execute();
 
 }
