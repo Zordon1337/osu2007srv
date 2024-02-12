@@ -83,40 +83,57 @@ function InsertScore(Score $score, mysqli $conn)
     $stmt->bind_param("sssssssssssssss", $score->fileChecksum, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass);
     $result = $stmt->execute();
     $totalscore = GetTotalScoreByUser($conn,$score->Username);
-    $A = CalculateAGrades($conn,$score->Username);
-    $S = CalculateSGrades($conn,$score->Username);
-    $SS = CalculateSSGrades($conn,$score->Username);
-    $accuracy = GetAccuracy($conn,$score->Username);
+    $A = strval(CalculateAGrades($conn, $score->Username));
+    $S = strval(CalculateSGrades($conn, $score->Username));
+    $SS = strval(CalculateSSGrades($conn, $score->Username));
+    $accuracy = GetAccuracy($conn, $score->Username);
+    
+
     $stmt = $conn->prepare("UPDATE `users` SET `totalscore`=?, `accuracy`=?, `S`=?, `SS`=?, `A`=? WHERE username = ?");
     $stmt->bind_param("ssssss", $totalscore, $accuracy, $S, $SS, $A, $score->Username);
     $result = $stmt->execute();
-
     
-
-
+    if (!$result) {
+        echo "Error: " . $stmt->error;
+    } else {
+        echo "$S,$SS,$A,$score->Username,$accuracy,$totalscore";
+    }
+   
 }
+
 function CalculateAGrades(mysqli $conn, $username)
 {
-    $stmt = $conn->prepare("SELECT * FROM scores WHERE Username = ? AND ranking = 'A'");
-    $stmt->bind_param("s", $username);
+    $ranking = 'A';
+    $sql = "SELECT * FROM scores WHERE Username = ? AND ranking = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $username,$ranking);
     $result = $stmt->execute();
-    return $stmt->num_rows;
+    
+    $result = $stmt->get_result();
+    return $result->num_rows;
 }
 
 function CalculateSGrades(mysqli $conn, $username)
 {
-    $stmt = $conn->prepare("SELECT * FROM scores WHERE Username = ? AND ranking = 'S'");
-    $stmt->bind_param("s", $username);
+    $ranking = 'S';
+    $sql = "SELECT * FROM scores WHERE Username = ? AND ranking = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $username, $ranking); 
     $result = $stmt->execute();
-    return $stmt->num_rows;
+    
+    $result = $stmt->get_result();
+    return $result->num_rows;
 }
 
 function CalculateSSGrades(mysqli $conn, $username)
 {
-    $stmt = $conn->prepare("SELECT * FROM scores WHERE Username = ? AND ranking = 'SS'");
-    $stmt->bind_param("s", $username);
-    $result = $stmt->execute();
-    return $stmt->num_rows;
+    $ranking = 'SS';
+    $sql = "SELECT * FROM scores WHERE Username = ? AND ranking = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $username,$ranking);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows;
 }
 
 function ReturnScores(mysqli $conn, $checksum)
