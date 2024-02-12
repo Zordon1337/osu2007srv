@@ -34,7 +34,7 @@ if(isset($_SESSION['password']))
             <p>Username</p>
             <input name="username"/>
             <p>password</p>
-            <input name="password"/>
+            <input type="password" name="password"/>
             <br/>
             <br/>
             <input type="submit" id="searchButton" value="Login"/>
