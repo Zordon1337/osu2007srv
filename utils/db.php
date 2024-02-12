@@ -331,22 +331,23 @@ function CreateAccount(mysqli $conn, $username, $password)
 
 function RenderLeaderboard(mysqli $conn)
 {
-    $sql = "SELECT Username, totalscore, accuracy, S, SS, A
+    $sql = "SELECT *
             FROM users
             ORDER BY CAST(totalscore AS SIGNED) DESC";
 
     $stmt = $conn->prepare($sql);
     $result = $stmt->execute();
-    $stmt->bind_result($username, $totalscore,$accuracy,$S,$SS,$A);
-    $realacc = (float)$accuracy*100;
+    $stmt->bind_result($userid,$username,$password,$totalscore,$accuracy,$S,$SS,$A);
+    
     $top = 1;
     while ($stmt->fetch()) {
+        $accuracy2 = round((float)$accuracy*100,2);
         echo "
         <tr>
         <td>$top</td>
         <td>$username</td>
         <td>$totalscore</td>
-        <td>$realacc</td>
+        <td>$accuracy2%</td>
         <td>$SS</td>
         <td>$S</td>
         <td>$A</td>
