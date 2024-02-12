@@ -85,7 +85,7 @@ if(!isset($_GET['action']))
 <body>
     <div id="container">
         <form action="/profile-settings.php?action=changepfp" method="POST" enctype="multipart/form-data"/>
-        <label for="image">Choose an image:</label>
+        <label for="image">Choose an image(must be 128x128 or it will be bugged in client):</label>
         <input type="file" name="image" id="image" accept="image/*" required>
         <br>
         <input type="submit" id="searchButton" value="Change profile picture">
