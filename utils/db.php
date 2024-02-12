@@ -25,7 +25,7 @@ function InitDB(mysqli $db)
 ";
 
 $queryUsers = "
-    CREATE TABLE `users` (
+    CREATE TABLE IF NOT EXISTS `users` (
     `userid` text NOT NULL,
     `username` text NOT NULL,
     `password` text NOT NULL,
