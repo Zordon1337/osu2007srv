@@ -56,7 +56,7 @@ if(!isset($_GET['action']))
     {
         $uploadDir = "forum/avatars/";
         $userid = GetUserIdByUsername($conn,$_SESSION['username']);
-        $uploadPath = "forum/avatars/$userid.png";
+        $uploadPath = "forum/avatars/$userid.jpg";
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $uploadPath)) {
             Header("location: profile-settings.php");
             die();
