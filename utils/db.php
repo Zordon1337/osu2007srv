@@ -318,7 +318,7 @@ function CheckIfUserExists(mysqli $conn, $username)
 }
 function CreateAccount(mysqli $conn, $username, $password)
 {
-    $sql = "INSERT INTO `users`(`userid`, `username`, `password`, `totalscore`, `accuracy`) VALUES (?, ?, ?, '0', '1');";
+    $sql = "INSERT INTO `users`(`userid`, `username`, `password`, `totalscore`, `accuracy`, 'S','SS','A') VALUES (?, ?, ?, '0', '1','0','0','0');";
     $randid = rand(1, 255555);
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $randid, $username, $password);
