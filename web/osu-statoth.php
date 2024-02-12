@@ -1,4 +1,4 @@
-<?php ini_set('display_errors', 0); ?>
+
 <?php
 include("../utils/db.php");
 

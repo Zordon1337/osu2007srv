@@ -236,11 +236,11 @@ function GetTotalScoreByUser(mysqli $conn, $username)
 }
 function GetPfp(mysqli $conn, $username)
 {
-    $sql = "SELECT * FROM users WHERE username = ?";
+    $sql = "SELECT userid FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s",$username);
     $result = $stmt->execute();
-    $stmt->bind_result($uid,$username,$password,$totalscore,$accuracy);
+    $stmt->bind_result($uid);
     $stmt->fetch();
     return "$uid.png";
 }
