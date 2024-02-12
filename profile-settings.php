@@ -58,6 +58,8 @@ if(!isset($_GET['action']))
         $userid = GetUserIdByUsername($conn,$_SESSION['username']);
         $uploadPath = "forum/avatars/$userid.jpg";
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $uploadPath)) {
+            include("utils/utils.php");
+            ConvertTo128By128($uploadPath);
             Header("location: profile-settings.php");
             die();
         } else {
