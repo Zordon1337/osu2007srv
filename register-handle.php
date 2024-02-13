@@ -19,4 +19,3 @@ if(!isset($_GET["username"]) || !isset($_GET['password']))
     die();
 }
 
-?>

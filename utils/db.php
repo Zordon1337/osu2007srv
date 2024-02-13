@@ -1,7 +1,7 @@
 <?php ini_set('display_errors', 0); ?>
 <?php
 include("conn.php");
-
+include("anticheat.php");
 function InitDB(mysqli $db)
 {
     $queryScores = "
@@ -89,14 +89,7 @@ function CheckIfCorrect($username,$password, mysqli $conn)
         return false;
     }
 }
-function BanUser(mysqli $conn,string $username, string $till,string $reason)
-{
-    $bandate = date("Y-m-d");
-    $stmt = $conn->prepare("INSERT INTO `bans`(`username`, `reason`, `bandate`, `banexpire`) VALUES (?,?,?,?)");
-    $stmt->bind_param("ssss",$username,$reason,$bandate,$till);
-    $stmt->execute();
-    $stmt->close();
-}
+
 function InsertScore(Score $score, mysqli $conn)
 {
     InitDB($conn);
@@ -175,7 +168,7 @@ function ReturnScores(mysqli $conn, $checksum)
     $result = $stmt->execute();
     $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
     $row = 1;
-    while ($stmt->fetch()) {
+    while ($stmt->fetch() && !CheckIfBanned($Username)) {
         echo "$row:$Username:$totalScore:$maxCombo:$count50:$count100:$count300:$countMiss:$countKatu:$countGeki:$perfect:$enabledMods\n";
         $row += 1;
     }
@@ -203,7 +196,7 @@ function ReturnScores2(mysqli $conn, $checksum)
 
     $id = 1;
     while ($stmt->fetch()) {
-        if ($pass != "False") {
+        if ($pass != "False" && !CheckIfBanned($Username)) {
             echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
         }
         $id++;
@@ -250,7 +243,7 @@ function ReturnScores5(mysqli $conn, $checksum)
     
     while ($stmt->fetch()) {
         $id = 1;
-        if($pass != "False")
+        if($pass != "False" && !CheckIfBanned($Username))
         {
             echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|0|$enabledMods|$id|$id|0\n";
         }
@@ -402,7 +395,8 @@ function CheckIfUserExists(mysqli $conn, $username)
 }
 function CreateAccount(mysqli $conn, $username, $password)
 {
-    $sql = "INSERT INTO `users`(`userid`, `username`, `password`, `totalscore`, `accuracy`, `S`, `SS`, `A`) VALUES (?, ?, ?, '0', '1', '0', '0', '0');";
+    $date = date("Y-m-d H:i:s");
+    $sql = "INSERT INTO `users`(`userid`, `username`, `password`, `totalscore`, `accuracy`, `S`, `SS`, `A`, `join_date`) VALUES (?, ?, ?, '0', '1', '0', '0', '0','$date');";
     $randid = rand(1, 255555);
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $randid, $username, $password);
@@ -426,23 +420,27 @@ function RenderLeaderboard(mysqli $conn)
 
     $top = 1;
     while ($stmt->fetch()) {
-        $accuracy2 = round((float)$accuracy * 100,2);
-        $totalscore2 = number_format($totalscore);
-        echo "
-        <tr>
-        <td>$top</td>
-        <td>$username</td>
-        <td>$totalscore2</td>
-        <td>$accuracy2%</td>
-        <td>$SS</td>
-        <td>$S</td>
-        <td>$A</td>
-        </tr>";
-        $top++;
+        if(!CheckIfBanned($username))
+        {
+            $accuracy2 = round((float)$accuracy * 100,2);
+            $totalscore2 = number_format($totalscore);
+            echo "
+            <tr>
+            <td>$top</td>
+            <td>$username</td>
+            <td>$totalscore2</td>
+            <td>$accuracy2%</td>
+            <td>$SS</td>
+            <td>$S</td>
+            <td>$A</td>
+            </tr>";
+            $top++;
+        }
+        
     }
 
     
-    //$stmt->close();
+    $stmt->close();
 
     echo "</tbody>
     </table>

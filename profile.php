@@ -31,14 +31,28 @@ if(CheckIfUserExists($conn,$username))
     {
         $add = "<p id='adminBadge'>ADMIN</p>";
     }
+    if(CheckIfBanned($username))
+    {
+        $days = CalculateBanDays(GetBanExpiration($conn,$username));
+        $baninfo2 = "";
+        if(CheckIfAdmin($conn,$username))
+        {
+            $baninfo2 = "";
+        }
+        $baninfo = "<p id='adminBadge'>User is restricted<br/>days since restrict: $days<br/>
+        $baninfo2
+        </p>";
+    }
 echo " 
 <img id='pfp' src='/forum/download.php?avatar=$img' height='186' width='186'/>
 $add
+$baninfo
 <pre>
 Accuracy: $accuracy%<br/>
 Total Score: $score<br/>
 Rank: #$rank
 </pre>
+
 </form>
 </div>
 </body>

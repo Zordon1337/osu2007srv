@@ -67,6 +67,15 @@ if(!isset($_GET['action']))
             die();
         }
     }
+    if($action == "banuser")
+    {
+        $username = $_POST['username'];
+        $reason = $_POST['reason'];
+        $date = $_POST['date'];
+
+
+        BanUser($conn,$username,$date,$reason);
+    }
 }
 
 ?>
@@ -104,6 +113,21 @@ if(!isset($_GET['action']))
             <br/>
             <br/>
             <input type='submit' id='searchButton' value='Add beatmap to whitelist'/>
+            </div>
+            </form>
+            <br/>
+            <br/>
+            <form action='/profile-settings.php?action=banuser' method='POST'>
+            <div>
+            <p>username</p>
+            <input name='username'/>
+            <p>reason</p>
+            <input name='reason'/>
+            <p>expire date(Y-M-D format)</p>
+            <input name='date'/>
+            <br/>
+            <br/>
+            <input type='submit' id='searchButton' value='Ban user'/>
             </div>
             </form>";
         }
