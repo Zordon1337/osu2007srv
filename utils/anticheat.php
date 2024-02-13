@@ -7,10 +7,15 @@ function CheckMods(string $mods)
 {
     $m = (int)$mods;
 }
-function CalculateBanDays(string $date)
+function CalculateBanDaysLeft(string $date)
 {
     $timestamp = strtotime($date);
     return floor(($timestamp - time())/(60*60*24));
+}
+function CalculateBanDaysSince(string $date)
+{
+    $timestamp = strtotime($date);
+    return floor((time() - $timestamp)/(60*60*24));
 }
 function BanUser(mysqli $conn,string $username, string $till,string $reason)
 {
@@ -46,5 +51,16 @@ function GetBanExpiration(mysqli $conn,string $username)
     while($stmt->fetch())
     {
         return $banexpire;
+    }
+}
+function GetBanDate(mysqli $conn,string $username)
+{
+    $stmt = $conn->prepare("SELECT * FROM bans WHERE username = ?");
+    $stmt->bind_param("s",$username);
+    $stmt->execute();
+    $stmt->bind_result($username,$reason,$bandate,$banexpire);
+    while($stmt->fetch())
+    {
+        return $bandate;
     }
 }

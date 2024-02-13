@@ -33,7 +33,7 @@ if(CheckIfUserExists($conn,$username))
     }
     if(CheckIfBanned($username))
     {
-        $days = CalculateBanDays(GetBanExpiration($conn,$username));
+        $days = CalculateBanDaysSince(GetBanDate($conn,$username));
         $baninfo2 = "";
         if(CheckIfAdmin($conn,$username))
         {
