@@ -4,10 +4,11 @@
 2. rename file conn_ex.php to conn.php in utils directory
 3. (optional but recommended) Create new DB user
 4. Create Database with any name you want
-5. enter you database credentials in utils/db.php
-6. go to SERVER_IP:PORT/register.php and create account(server will automatically create tables in database)
-7. Redirect osu.ppy.sh connections to server ip(you can use: server switcher, fiddler, hosts method or just patch client using for ex. DnSpy)
-8. Start client and login, Enjoy
+5. rename file conn_ex.php to conn.php in utils directory
+6. enter you database credentials in utils/conn.php
+7. go to SERVER_IP:PORT/register.php and create account(server will automatically create tables in database)
+8. Redirect osu.ppy.sh connections to server ip(you can use: server switcher, fiddler, hosts method or just patch client using for ex. DnSpy)
+9. Start client and login, Enjoy
 ### notes
 <pre>
   server DOES NOT include irc chat, you have to make one yourself 
