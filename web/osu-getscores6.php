@@ -15,6 +15,7 @@ if($b504_experiment == true)
         echo "\n";
         echo "\n";
         echo "\n";
+        echo "\n";
         ReturnScores5($conn,$checksum);
        
     } else {

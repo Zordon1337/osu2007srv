@@ -387,7 +387,8 @@ function RenderLeaderboard(mysqli $conn)
             ORDER BY CAST(totalscore AS SIGNED) DESC";
 
     $stmt = $conn->prepare($sql);
-    $result = $stmt->execute();
+    $stmt->execute();
+    $result = $stmt->get_result();
     $stmt->bind_result($userid,$username,$password,$totalscore,$accuracy,$S,$SS,$A);
     
     $top = 1;
@@ -410,4 +411,34 @@ function RenderLeaderboard(mysqli $conn)
     </table>
     </div>
     </body>";
+}
+
+function OnlineRecord(mysqli $conn, $username)
+{
+    $sql = "SELECT *
+            FROM scores
+            ORDER BY CAST(totalscore AS SIGNED) DESC
+            WHERE Username = ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s",$username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result->num_rows > 0)
+    {
+        $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+    
+        while ($stmt->fetch()) {
+            $id = 1;
+            if($pass != "False" && $id <= 1)
+            {
+                echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|0|$enabledMods|$id|$id|0\n";
+                $id++;
+            }
+            
+        }
+        
+    } else {
+        echo "\n";
+    }
 }
