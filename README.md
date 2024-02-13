@@ -16,7 +16,7 @@
   rating needs to be implemented in b222
 
   if you want to use it with tcp bancho, you can use <a href="https://github.com/Zordon1337/BanchoTP">bancho "proxy"</a> that redirects socket requests to http backend
-  
+  if you wanna see screenshots look at the bottom of readme
 </pre>
 ### supported versions
 <pre>
@@ -31,3 +31,19 @@
   b86 - fully supported
   b70 - fully supported
 </pre>
+
+# screenshots
+### website:
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/7b5746be-8d82-41d9-8e4a-d4cdea539afe)
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/35f5a99a-312b-4c45-8191-3dcd1c9578af)
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/53c6477a-cc89-4faa-9c5f-cf67aa0ea6eb)
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/c30b00df-7409-4a92-b1c5-f321275cb010)
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/78217ffe-2145-4154-9043-109cbc674781)
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/e55c0d06-5e0e-4562-8928-045f73369558)
+### ingame:
+#### b1077a connected through proxy
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/d9c7addc-970b-4c60-80d8-b50beaec3e66)
+#### b699 connected through proxy
+![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/881a55da-ef42-4c27-8663-68ad34cbc969)
+#### b222 connected
+![screenshot001](https://github.com/Zordon1337/osu2007srv/assets/65111609/9a86c4e1-2b79-44c9-a387-eaf89ece8d42)
