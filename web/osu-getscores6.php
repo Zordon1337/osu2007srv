@@ -12,9 +12,11 @@ if($b504_experiment == true)
     if(CheckIfBeatmapRanked($conn,$checksum))
     {
         echo "\n";
-        echo "0\n";
+        echo "\n";
+        echo "\n";
         echo "\n";
         ReturnScores5($conn,$checksum);
+       
     } else {
         echo "0";
     }

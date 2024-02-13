@@ -210,7 +210,16 @@ function CheckIfAdmin(mysqli $conn, $username)
 function ReturnScores5(mysqli $conn, $checksum)
 {
     InitDB($conn);
-    $sql = "SELECT * FROM scores WHERE fileChecksum = ? ORDER BY CAST(totalScore AS SIGNED) DESC";
+    $sql = "WITH RankedScores AS (
+        SELECT *,
+            ROW_NUMBER() OVER (PARTITION BY Username ORDER BY CAST(totalScore AS SIGNED) DESC) AS row_num
+        FROM scores
+        WHERE fileChecksum = ?
+    )
+    SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass
+    FROM RankedScores
+    WHERE row_num = 1
+    ORDER BY CAST(totalScore AS SIGNED) DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $checksum);
     $result = $stmt->execute();
@@ -220,7 +229,7 @@ function ReturnScores5(mysqli $conn, $checksum)
         $id = 1;
         if($pass != "False")
         {
-            echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+            echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|0|$enabledMods|$id|$id|0\n";
         }
         
     }
