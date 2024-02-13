@@ -16,7 +16,7 @@
 </pre>
 ### supported versions
 <pre>
-  b504 - experimental score server(not recommended to use)
+  b282-b1XXX - experimental score server(not recommended to use)
   b222 - everything works except replays
   b196 - everything works except replays
   b170 - everything works except replays
