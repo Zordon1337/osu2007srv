@@ -33,8 +33,8 @@ $queryUsers = "
     `accuracy` text NOT NULL,
     `S` text NOT NULL,
     `SS` text NOT NULL,
-    `A` text NOT NULL
-    `join_date` text NOT NULL,
+    `A` text NOT NULL,
+    `join_date` text NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ";
 $queryAdmins = "
@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS `beatmapsets` (
 $restrictedPlayers = "
 CREATE TABLE IF NOT EXISTS `bans` (
     `username` text NOT NULL,
-    'reason' text NOT NULL,
+    `reason` text NOT NULL,
     `bandate` text NOT NULL,
-    `banexpire` text NOT NULL,
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4";
+    `banexpire` text NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 $queryBeatmapsets2 = "
   INSERT IGNORE INTO `beatmapsets` (`checksum`, `name`) VALUES
   ('a5b99395a42bd55bc5eb1d2411cbdf8b', 'Kenji Ninuma - DISCO PRINCE');
@@ -80,11 +80,11 @@ function CheckIfCorrect($username,$password, mysqli $conn)
     $stmt->store_result();
     if($stmt->num_rows > 0)
     {
-        
+        $stmt->close();
         
         return true;
     } else {
-        
+        $stmt->close();
         
         return false;
     }
@@ -95,6 +95,7 @@ function BanUser(mysqli $conn,string $username, string $till,string $reason)
     $stmt = $conn->prepare("INSERT INTO `bans`(`username`, `reason`, `bandate`, `banexpire`) VALUES (?,?,?,?)");
     $stmt->bind_param("ssss",$username,$reason,$bandate,$till);
     $stmt->execute();
+    $stmt->close();
 }
 function InsertScore(Score $score, mysqli $conn)
 {
@@ -113,7 +114,7 @@ function InsertScore(Score $score, mysqli $conn)
     $stmt = $conn->prepare("UPDATE `users` SET `totalscore`=?, `accuracy`=?, `S`=?, `SS`=?, `A`=? WHERE username = ?");
     $stmt->bind_param("ssssss", $totalscore, $accuracy, $S, $SS, $A, $score->Username);
     $result = $stmt->execute();
-    
+    $stmt->close();
    
    
 }
@@ -127,6 +128,7 @@ function CalculateAGrades(mysqli $conn, $username)
     $result = $stmt->execute();
     
     $result = $stmt->get_result();
+    $stmt->close();
     return $result->num_rows;
 }
 
@@ -139,6 +141,7 @@ function CalculateSGrades(mysqli $conn, $username)
     $result = $stmt->execute();
     
     $result = $stmt->get_result();
+    $stmt->close();
     return $result->num_rows;
 }
 
@@ -150,6 +153,7 @@ function CalculateSSGrades(mysqli $conn, $username)
     $stmt->bind_param("ss", $username,$ranking);
     $stmt->execute();
     $result = $stmt->get_result();
+    $stmt->close();
     return $result->num_rows;
 }
 
@@ -175,6 +179,7 @@ function ReturnScores(mysqli $conn, $checksum)
         echo "$row:$Username:$totalScore:$maxCombo:$count50:$count100:$count300:$countMiss:$countKatu:$countGeki:$perfect:$enabledMods\n";
         $row += 1;
     }
+    $stmt->close();
 }
 function ReturnScores2(mysqli $conn, $checksum)
 {
@@ -217,8 +222,10 @@ function CheckIfAdmin(mysqli $conn, $username)
     $result = $stmt->get_result();
     if($result->num_rows != 0)
     {
+        $stmt->close();
         return true;
     } else {
+        $stmt->close();
         return false;
     }
 
@@ -269,11 +276,13 @@ function GetAccuracy(mysqli $conn, $username)
             $row++;
         }
     }
+    $stmt->close();
     if ($row > 0) {
-        return round($accuracy / $row,2);
+        return $accuracy / $row;
     } else {
         return 1; 
     }
+
 }
 
 function GetTotalScoreByUser(mysqli $conn, $username)
@@ -289,6 +298,7 @@ function GetTotalScoreByUser(mysqli $conn, $username)
     while ($stmt->fetch()) {
         $totalScoreSum += (int)$totalScore;
     }
+    $stmt->close();
     return $totalScoreSum;
 }
 function GetPfp(mysqli $conn, $username)
@@ -299,6 +309,7 @@ function GetPfp(mysqli $conn, $username)
     $result = $stmt->execute();
     $stmt->bind_result($uid);
     $stmt->fetch();
+    $stmt->close();
     return "$uid.jpg";
 }
 function GetUserIdByUsername(mysqli $conn, $username)
@@ -318,6 +329,7 @@ function GetPlayersAmount(mysqli $conn)
     $stmt = $conn->prepare("SELECT * FROM users");
     $stmt->execute();
     $result = $stmt->get_result();
+    $stmt->close();
     return $result->num_rows;
 }
 function GetTotalPlayCount(mysqli $conn)
@@ -325,6 +337,7 @@ function GetTotalPlayCount(mysqli $conn)
     $stmt = $conn->prepare("SELECT * FROM scores");
     $stmt->execute();
     $result = $stmt->get_result();
+    $stmt->close();
     return $result->num_rows;
 }
 function CheckIfBeatmapRanked(mysqli $conn, $checksum)
@@ -336,10 +349,11 @@ function CheckIfBeatmapRanked(mysqli $conn, $checksum)
     $stmt->store_result();
     if($stmt->num_rows > 0)
     {
+        $stmt->close();
         return true;
     } else {
         
-        
+        $stmt->close();
         return false;
     }
 }
@@ -363,6 +377,7 @@ function GetRank(mysqli $conn, $username)
         }
         $id++;
     }
+    $stmt->close();
     return 0; 
 }
 
@@ -376,12 +391,14 @@ function CheckIfUserExists(mysqli $conn, $username)
     $stmt->store_result();
     if($stmt->num_rows > 0)
     {
+        $stmt->close();
         return true;
     } else {
         
-        
+        $stmt->close();
         return false;
     }
+    
 }
 function CreateAccount(mysqli $conn, $username, $password)
 {
@@ -390,6 +407,8 @@ function CreateAccount(mysqli $conn, $username, $password)
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $randid, $username, $password);
     $result = $stmt->execute();
+    
+    $stmt->close();
 }
 
 
@@ -398,18 +417,16 @@ function CreateAccount(mysqli $conn, $username, $password)
 
 function RenderLeaderboard(mysqli $conn)
 {
-    $sql = "SELECT *
-            FROM users
-            ORDER BY CAST(totalscore AS SIGNED) DESC";
+    $sql = "SELECT * FROM users ORDER BY CAST(totalscore AS SIGNED) DESC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->bind_result($userid,$username,$password,$totalscore,$accuracy,$S,$SS,$A);
     
+    $stmt->bind_result($userid, $username, $password, $totalscore, $accuracy, $S, $SS, $A, $join_date);
+
     $top = 1;
     while ($stmt->fetch()) {
-        $accuracy2 = round((float)$accuracy*100);
+        $accuracy2 = round((float)$accuracy * 100,2);
         $totalscore2 = number_format($totalscore);
         echo "
         <tr>
@@ -423,38 +440,15 @@ function RenderLeaderboard(mysqli $conn)
         </tr>";
         $top++;
     }
+
+    
+    //$stmt->close();
+
     echo "</tbody>
     </table>
     </div>
     </body>";
 }
 
-function OnlineRecord(mysqli $conn, $username)
-{
-    $sql = "SELECT *
-            FROM scores
-            ORDER BY CAST(totalscore AS SIGNED) DESC
-            WHERE Username = ?";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s",$username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if($result->num_rows > 0)
-    {
-        $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
-    
-        while ($stmt->fetch()) {
-            $id = 1;
-            if($pass != "False" && $id <= 1)
-            {
-                echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|0|$enabledMods|$id|$id|0\n";
-                $id++;
-            }
-            
-        }
-        
-    } else {
-        echo "\n";
-    }
-}
+
