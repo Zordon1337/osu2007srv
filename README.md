@@ -13,6 +13,9 @@
   server DOES NOT include irc chat, you have to make one yourself 
   or use my <a href="https://github.com/Zordon1337/EIRC">very basic server</a>
   rating needs to be implemented in b222
+
+  if you want to use it with tcp bancho, you can use <a href="https://github.com/Zordon1337/BanchoTP">bancho "proxy"</a> that redirects socket requests to http backend
+  
 </pre>
 ### supported versions
 <pre>
