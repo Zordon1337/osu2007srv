@@ -254,7 +254,7 @@ function GetAccuracy(mysqli $conn, $username)
         }
     }
     if ($row > 0) {
-        return $accuracy / $row;
+        return round($accuracy / $row,2);
     } else {
         return 1; 
     }
