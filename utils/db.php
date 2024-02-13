@@ -34,6 +34,7 @@ $queryUsers = "
     `S` text NOT NULL,
     `SS` text NOT NULL,
     `A` text NOT NULL
+    `join_date` text NOT NULL,
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ";
 $queryAdmins = "
@@ -47,6 +48,13 @@ CREATE TABLE IF NOT EXISTS `beatmapsets` (
     `name` text NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
   ";
+$restrictedPlayers = "
+CREATE TABLE IF NOT EXISTS `bans` (
+    `username` text NOT NULL,
+    'reason' text NOT NULL,
+    `bandate` text NOT NULL,
+    `banexpire` text NOT NULL,
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4";
 $queryBeatmapsets2 = "
   INSERT IGNORE INTO `beatmapsets` (`checksum`, `name`) VALUES
   ('a5b99395a42bd55bc5eb1d2411cbdf8b', 'Kenji Ninuma - DISCO PRINCE');
@@ -60,6 +68,7 @@ $queryBeatmapsets2 = "
       $db->query($queryAdmins);
       $db->query($queryUsers);
       $db->query($queryScores);
+      $db->query($restrictedPlayers);
       
 }
 function CheckIfCorrect($username,$password, mysqli $conn)
@@ -79,6 +88,13 @@ function CheckIfCorrect($username,$password, mysqli $conn)
         
         return false;
     }
+}
+function BanUser(mysqli $conn,string $username, string $till,string $reason)
+{
+    $bandate = date("Y-m-d");
+    $stmt = $conn->prepare("INSERT INTO `bans`(`username`, `reason`, `bandate`, `banexpire`) VALUES (?,?,?,?)");
+    $stmt->bind_param("ssss",$username,$reason,$bandate,$till);
+    $stmt->execute();
 }
 function InsertScore(Score $score, mysqli $conn)
 {
@@ -394,7 +410,7 @@ function RenderLeaderboard(mysqli $conn)
     $top = 1;
     while ($stmt->fetch()) {
         $accuracy2 = round((float)$accuracy*100,2);
-        $totalscore2 = number_format($totalscore);
+        $totalscore2 = number_format((int)$totalscore);
         echo "
         <tr>
         <td>$top</td>
