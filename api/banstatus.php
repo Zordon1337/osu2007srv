@@ -1,5 +1,5 @@
 <?php
-include("utils/db.php");
+include("../utils/db.php");
 $username = $_GET['u'];
 if(CheckIfBanned($username))
 {
