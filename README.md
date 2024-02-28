@@ -21,13 +21,13 @@
 ### supported versions
 <pre>
   b282-b1XXX - experimental score server(not recommended to use)
-  b222 - everything works except replays
-  b196 - everything works except replays
-  b170 - everything works except replays
-  b162 - everything works except replays
-  b144 - everything works except replays
-  b130 - everything works except replays
-  b99 - everything works except replays
+  b222 - everything works
+  b196 - everything works
+  b170 - everything works
+  b162 - everything works
+  b144 - everything works
+  b130 - everything works
+  b99 - everything works
   b86 - fully supported
   b70 - fully supported
 </pre>

@@ -6,15 +6,19 @@ introduced around b99
 replaced by osu-getscores2.php in b162
 */
 include("../utils/db.php");
-$checksum = $_GET["c"];
-if($all_bmaps_ranked == false)
+include("../utils/config.php");
+if($latest_version > 98)
 {
-    if(CheckIfBeatmapRanked($conn,$checksum))
+    $checksum = $_GET["c"];
+    if($all_bmaps_ranked == false)
     {
-        
-        ReturnScores($conn,$checksum);
-    } else {
-        echo "-1";
+        if(CheckIfBeatmapRanked($conn,$checksum))
+        {
+            
+            ReturnScores($conn,$checksum);
+        } else {
+            echo "-1";
+        }
     }
 }
 

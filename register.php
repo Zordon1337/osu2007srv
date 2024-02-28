@@ -29,7 +29,7 @@ if(isset($_GET['afterregister']))
 
 
 <form action="register-handle.php" method="GET">
-        <div id="container">
+        <div id="login-container">
             <p>Username</p>
             <input name="username"/>
             <p>password</p>

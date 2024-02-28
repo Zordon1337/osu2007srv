@@ -3,17 +3,69 @@ body {
     color: #ffffff;
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 50px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+#navbar {
+    width: 100%;
+    border-bottom: 2px solid white;
+    background-color: #333131;
+    position: fixed;
+    text-align: right;
+    top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+}
+
+
+#navbar h3,
+#navbar button,
+#navbar p {
+    display: inline;
+    margin: 0;
+}
+
+#navbar a {
+    text-decoration: none;
+    color: yellowgreen;
+    text-align: right;
 }
 
 #container {
     border: 2px solid #000000;
     padding: 20px;
     text-align: center;
+    width: 50%;
+    margin-top: 20px;
+    box-sizing: border-box;
+    background-color: #333131;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#login-container {
+    border: 2px solid #000000;
+    padding: 20px;
+    text-align: center;
+    width: auto;
+    margin-top: 20px;
+    box-sizing: border-box;
+    background-color: #333131;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #playerNameLabel {
@@ -39,26 +91,27 @@ body {
 #searchButton:hover {
     background-color: #45a049;
 }
+
 #playerInfo {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
 }
+
 #adminBadge {
-            
-    color:red;
-    text-align:center;
-    
+    color: red;
+    text-align: center;
 }
+
 #pfp {
     border: 2px solid white;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    
 }
 
 th, td {
@@ -68,6 +121,6 @@ th, td {
 }
 
 th {
-  background-color: #f2f2f2;
-  color:black;
+    background-color: #f2f2f2;
+    color: black;
 }

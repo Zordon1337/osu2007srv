@@ -10,15 +10,23 @@
     </style>
 </head>
 <body>
+<?php
+include_once('utils/config.php');
+include_once('utils/db.php');
+include_once('utils/web.php');
+DrawNavbar($server_name);
+
+?>
+        
     <div id="container">
         <form action="/profile.php" method="GET"/>
-        <h1>osu!2007</h1>
+        <img src="img/placeholder.gif" height="160"width="160"/>
 <?php
-include("utils/db.php");
 $d1 = GetPlayersAmount($conn);
 $d2 = GetTotalPlayCount($conn);
 echo "<p>Currently serving $d1 players,<br/> with total of $d2 plays</p>"
 ?>
+        
         <div id="playerInfo">
             <label for="playerNameInput" id="playerNameLabel">Player Name:</label>
             <input type="text" id="playerNameInput" name="username">
@@ -26,19 +34,13 @@ echo "<p>Currently serving $d1 players,<br/> with total of $d2 plays</p>"
         <input type="submit" id="searchButton" value="Search Player"/>
         </form>
         <br/>
-        <a href="/register.php">
-            <button id="searchButton">Register</button>
-        </a>
+        
     
-        <a href="/leaderboard.php">
-            <button id="searchButton">Leaderboard</button>
-        </a>
+        
         
         <br/>
         <br/>
-        <a href="/login.php">
-            <button id="searchButton">Login</button>
-        </a>
+        
     </div>
 </body>
 </html>

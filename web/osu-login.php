@@ -13,10 +13,13 @@ if(!isset($_GET['username']) || !isset($_GET['password']))
 }
 $username = $_GET['username'];
 $password = $_GET['password']; // md5 hash
-
-if(CheckIfCorrect($username,$password,$conn))
+if($latest_version > 98)
 {
-    echo "1";
-} else {
-    echo "0";
+    if(CheckIfCorrect($username,$password,$conn))
+    {
+        echo "1";
+    } else {
+        echo "0";
+    }
 }
+

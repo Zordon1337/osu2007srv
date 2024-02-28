@@ -26,7 +26,7 @@ if($b504_experiment == true)
     }
     if(CheckIfCorrect($s->Username,$password,$conn))
     {
-        InsertScore($s,$conn);
+        //InsertScore($s,$conn);
     }
     
     

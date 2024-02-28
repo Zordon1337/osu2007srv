@@ -20,7 +20,8 @@ function InitDB(mysqli $db)
         `perfect` text NOT NULL,
         `ranking` text NOT NULL,
         `enabledMods` text NOT NULL,
-        `pass` text NOT NULL
+        `pass` text NOT NULL,
+        `beatmap` text NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ";
 
@@ -90,12 +91,11 @@ function CheckIfCorrect($username,$password, mysqli $conn)
     }
 }
 
-function InsertScore(Score $score, mysqli $conn)
+function InsertScore(Score $score, mysqli $conn,$replayname)
 {
     InitDB($conn);
-    $stmt = $conn->prepare("INSERT INTO `scores` (`fileChecksum`, `Username`, `onlinescoreChecksum`, `count300`, `count100`, `count50`, `countGeki`, `countKatu`, `countMiss`, `totalScore`, `maxCombo`, `perfect`, `ranking`, `enabledMods`, `pass`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-    $stmt->bind_param("sssssssssssssss", $score->fileChecksum, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass);
+    $stmt = $conn->prepare("INSERT INTO `scores` (`fileChecksum`, `Username`, `onlinescoreChecksum`, `count300`, `count100`, `count50`, `countGeki`, `countKatu`, `countMiss`, `totalScore`, `maxCombo`, `perfect`, `ranking`, `enabledMods`, `pass`,`beatmap`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)");
+    $stmt->bind_param("ssssssssssssssss", $replayname, $score->Username, $score->onlinescoreChecksum, $score->count300, $score->count100, $score->count50, $score->countGeki, $score->countKatu, $score->countMiss, $score->totalScore, $score->maxCombo, $score->perfect, $score->ranking, $score->enabledMods, $score->pass,$score->fileChecksum);
     $result = $stmt->execute();
     $totalscore = GetTotalScoreByUser($conn,$score->Username);
     $A = strval(CalculateAGrades($conn, $score->Username));
@@ -157,19 +157,23 @@ function ReturnScores(mysqli $conn, $checksum)
         SELECT *,
             ROW_NUMBER() OVER (PARTITION BY Username ORDER BY CAST(totalScore AS SIGNED) DESC) AS row_num
         FROM scores
-        WHERE fileChecksum = ?
+        WHERE beatmap = ?
     )
-    SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass
+    SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass,beatmap
     FROM RankedScores
     WHERE row_num = 1
     ORDER BY CAST(totalScore AS SIGNED) DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $checksum);
     $result = $stmt->execute();
-    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass,$beatmap);
     $row = 1;
     while ($stmt->fetch() && !CheckIfBanned($Username)) {
-        echo "$row:$Username:$totalScore:$maxCombo:$count50:$count100:$count300:$countMiss:$countKatu:$countGeki:$perfect:$enabledMods\n";
+        if($pass != "False")
+        {
+            $newstr = str_replace(".osr","",$fileChecksum);
+            echo "$newstr:$Username:$totalScore:$maxCombo:$count50:$count100:$count300:$countMiss:$countKatu:$countGeki:$perfect:$enabledMods\n";
+        }
         $row += 1;
     }
     $stmt->close();
@@ -182,9 +186,9 @@ function ReturnScores2(mysqli $conn, $checksum)
                 SELECT *,
                     ROW_NUMBER() OVER (PARTITION BY Username ORDER BY CAST(totalScore AS SIGNED) DESC) AS row_num
                 FROM scores
-                WHERE fileChecksum = ?
+                WHERE beatmap = ?
             )
-            SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass
+            SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass,beatmap
             FROM RankedScores
             WHERE row_num = 1
             ORDER BY CAST(totalScore AS SIGNED) DESC";
@@ -197,7 +201,7 @@ function ReturnScores2(mysqli $conn, $checksum)
     $id = 1;
     while ($stmt->fetch()) {
         if ($pass != "False" && !CheckIfBanned($Username)) {
-            echo "$id|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+            echo "$fileChecksum|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
         }
         $id++;
     }
@@ -368,7 +372,10 @@ function GetRank(mysqli $conn, $username)
         if (strcasecmp($currentUsername, $username) === 0) {
             return $id;
         }
-        $id++;
+        if(!CheckIfBanned($currentUsername))
+        {
+            $id++;
+        }
     }
     $stmt->close();
     return 0; 
@@ -447,6 +454,25 @@ function RenderLeaderboard(mysqli $conn)
     </div>
     </body>";
 }
-
+function CheckIfLoggedIn()
+{
+    include("conn.php");
+    session_start();
+    if(session_status() == PHP_SESSION_ACTIVE)
+        {
+            if(!isset($_SESSION['username'])||!isset($_SESSION['password']))
+            {
+                return false;
+            } else {
+                if(!CheckIfCorrect($_SESSION['username'],$_SESSION['password'],$conn))
+                {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+}
 
 
