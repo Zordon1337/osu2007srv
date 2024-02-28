@@ -34,12 +34,7 @@
 
 # screenshots
 ### website:
-![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/7b5746be-8d82-41d9-8e4a-d4cdea539afe)
-![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/35f5a99a-312b-4c45-8191-3dcd1c9578af)
-![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/53c6477a-cc89-4faa-9c5f-cf67aa0ea6eb)
-![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/c30b00df-7409-4a92-b1c5-f321275cb010)
-![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/78217ffe-2145-4154-9043-109cbc674781)
-![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/e55c0d06-5e0e-4562-8928-045f73369558)
+need to update
 ### ingame:
 #### b1077a connected through proxy
 ![image](https://github.com/Zordon1337/osu2007srv/assets/65111609/d9c7addc-970b-4c60-80d8-b50beaec3e66)
