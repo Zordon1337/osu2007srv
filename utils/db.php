@@ -261,7 +261,7 @@ function GetAccuracy(mysqli $conn, $username)
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $result = $stmt->execute();
-    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass,$beatmap);
 
     $accuracy = 0;
     $row = 0;
