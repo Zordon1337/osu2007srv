@@ -181,29 +181,26 @@ function ReturnScores(mysqli $conn, $checksum)
 function ReturnScores2(mysqli $conn, $checksum)
 {
     InitDB($conn);
-
     $sql = "WITH RankedScores AS (
-                SELECT *,
-                    ROW_NUMBER() OVER (PARTITION BY Username ORDER BY CAST(totalScore AS SIGNED) DESC) AS row_num
-                FROM scores
-                WHERE beatmap = ?
-            )
-            SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass,beatmap
-            FROM RankedScores
-            WHERE row_num = 1
-            ORDER BY CAST(totalScore AS SIGNED) DESC";
-
+        SELECT *,
+            ROW_NUMBER() OVER (PARTITION BY Username ORDER BY CAST(totalScore AS SIGNED) DESC) AS row_num
+        FROM scores
+        WHERE beatmap = ?
+    )
+    SELECT fileChecksum, Username, onlinescoreChecksum, count300, count100, count50, countGeki, countKatu, countMiss, totalScore, maxCombo, perfect, ranking, enabledMods, pass,beatmap
+    FROM RankedScores
+    WHERE row_num = 1
+    ORDER BY CAST(totalScore AS SIGNED) DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $checksum);
     $result = $stmt->execute();
-    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass);
-
-    $id = 1;
+    $stmt->bind_result($fileChecksum, $Username, $onlinescoreChecksum, $count300, $count100, $count50, $countGeki, $countKatu, $countMiss, $totalScore, $maxCombo, $perfect, $ranking, $enabledMods, $pass,$beatmap);
+    $row = 1;
     while ($stmt->fetch()) {
         if ($pass != "False" && !CheckIfBanned($Username)) {
-            echo "$fileChecksum|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$id|$id.png|0\n";
+            echo "$fileChecksum|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$row|$row.png|0\n";
         }
-        $id++;
+        $row++;
     }
 
     $stmt->close();
