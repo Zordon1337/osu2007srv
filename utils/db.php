@@ -198,7 +198,8 @@ function ReturnScores2(mysqli $conn, $checksum)
     $row = 1;
     while ($stmt->fetch()) {
         if ($pass != "False" && !CheckIfBanned($Username)) {
-            echo "$fileChecksum|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$row|$row.png|0\n";
+            $newstr = str_replace(".osr","",$fileChecksum);
+            echo "$newstr|$Username|$totalScore|$maxCombo|$count50|$count100|$count300|$countMiss|$countKatu|$countGeki|$perfect|$enabledMods|$row|$row.png|0\n";
         }
         $row++;
     }
